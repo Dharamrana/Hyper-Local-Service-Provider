@@ -10,6 +10,7 @@ import com.urbancompany.clone.repository.ServiceRepository;
 import com.urbancompany.clone.repository.ServiceRequestRepository;
 import com.urbancompany.clone.repository.UserRepository;
 import com.urbancompany.clone.wallet.WalletService;
+import com.urbancompany.clone.availability.AvailabilityService;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.security.core.Authentication;
@@ -58,16 +59,18 @@ public class ServiceRequestService {
     private final ServiceRepository serviceRepository;
     private final UserRepository userRepository;
     private final WalletService walletService;
+    private final AvailabilityService availabilityService;
 
     public ServiceRequestService(ServiceRequestRepository serviceRequestRepository,
                                  ServiceProviderRepository serviceProviderRepository,
                                  ServiceRepository serviceRepository,
-                                 UserRepository userRepository, WalletService walletService) {
+                                 UserRepository userRepository, WalletService walletService, AvailabilityService availabilityService) {
         this.serviceRequestRepository = serviceRequestRepository;
         this.serviceProviderRepository = serviceProviderRepository;
         this.serviceRepository = serviceRepository;
         this.userRepository = userRepository;
         this.walletService = walletService;
+        this.availabilityService = availabilityService;
     }
 
     /** Privacy-sensitive (scoped per user in controller) — never cached across accounts. */
@@ -135,6 +138,13 @@ public class ServiceRequestService {
 
         if (request.getPaymentMethod() == null || request.getPaymentMethod().isBlank()) {
             request.setPaymentMethod("UPI");
+        }
+
+        // Calendar gate: a picked professional must be free in that slot (leave/capacity aware).
+        if (request.getProvider() != null && !availabilityService.isAvailable(
+                request.getProvider().getId(), request.getScheduledDate(), request.getScheduledSlot())) {
+            throw new IllegalStateException("Selected professional is not available on "
+                    + request.getScheduledDate() + " " + request.getScheduledSlot() + ". Please pick another slot or professional.");
         }
 
         // UC price breakup: sum of locked line totals + fixed visiting fee (server-computed, never trusted from client).
