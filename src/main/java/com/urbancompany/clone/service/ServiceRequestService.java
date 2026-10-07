@@ -9,6 +9,7 @@ import com.urbancompany.clone.repository.ServiceProviderRepository;
 import com.urbancompany.clone.repository.ServiceRepository;
 import com.urbancompany.clone.repository.ServiceRequestRepository;
 import com.urbancompany.clone.repository.UserRepository;
+import com.urbancompany.clone.wallet.WalletService;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.security.core.Authentication;
@@ -56,15 +57,17 @@ public class ServiceRequestService {
     private final ServiceProviderRepository serviceProviderRepository;
     private final ServiceRepository serviceRepository;
     private final UserRepository userRepository;
+    private final WalletService walletService;
 
     public ServiceRequestService(ServiceRequestRepository serviceRequestRepository,
                                  ServiceProviderRepository serviceProviderRepository,
                                  ServiceRepository serviceRepository,
-                                 UserRepository userRepository) {
+                                 UserRepository userRepository, WalletService walletService) {
         this.serviceRequestRepository = serviceRequestRepository;
         this.serviceProviderRepository = serviceProviderRepository;
         this.serviceRepository = serviceRepository;
         this.userRepository = userRepository;
+        this.walletService = walletService;
     }
 
     /** Privacy-sensitive (scoped per user in controller) — never cached across accounts. */
@@ -349,7 +352,10 @@ public class ServiceRequestService {
         request.setStatus(ServiceRequestStatus.COMPLETED);
         request.setCompletedAt(LocalDateTime.now());
         evictCache();
-        return serviceRequestRepository.save(request);
+        ServiceRequest saved = serviceRequestRepository.save(request);
+        // Wallet: split finalPrice -> provider credit (runs once; mock/CASH both ledgered).
+        try { walletService.creditOnCompletion(saved); } catch (Exception ex) { /* never fail completion on ledger */ }
+        return saved;
     }
 
     /** UC reschedule: move visit to another day/slot while booking is still active. */
@@ -545,7 +551,10 @@ public class ServiceRequestService {
         request.setStatus(ServiceRequestStatus.COMPLETED);
         request.setCompletedAt(LocalDateTime.now());
         evictCache();
-        return serviceRequestRepository.save(request);
+        ServiceRequest saved = serviceRequestRepository.save(request);
+        // Wallet: split finalPrice -> provider credit (runs once; mock/CASH both ledgered).
+        try { walletService.creditOnCompletion(saved); } catch (Exception ex) { /* never fail completion on ledger */ }
+        return saved;
     }
 
     public ServiceProvider setProviderAvailability(String providerEmail, boolean available) {
