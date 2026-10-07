@@ -23,7 +23,7 @@ Repo: **Hyper-Local-Service-Provider** (Spring Boot 3.2.5, Java 17, Thymeleaf, M
 - [x] Provider availability calendar — `availability/` slot overrides, leaves, capacity, booking gate; public slots API for wizard. (Job-pool accept timeout is next micro-step)
 - [x] Coupon engine + referral — `promo/PromoService` validate/redeem with caps, CouponRedemption audit, Referral PENDING→CREDITED on first completion, WhatsApp share link (`/api/promo/my-referral`)
 - [x] PWA wrapper — `manifest.webmanifest`, `sw.js` (network-first pages, cache-first static, offline page), install prompt + iOS hint, icons, shortcuts
-- [ ] Hindi/Hinglish i18n toggle + voice search
+- [x] Hindi/Hinglish i18n — Spring MessageSource (`i18n/messages*.properties`, cookie `hlsp-lang`, `?lang=hi`), instant EN/Hindi/Hinglish toggle (`js/i18n.js`), Hinglish WhatsApp copy. Voice search remains a micro-step (Web Speech API)
 
 ## Run
 ```bash

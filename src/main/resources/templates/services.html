@@ -28,6 +28,7 @@
                 <li><a href="/contact">Contact</a></li>
             </ul>
         </nav>
+        <button type="button" class="btn btn-outline btn-sm hlsp-lang-toggle" onclick="HLSPLang.cycle(this)" style="margin-right:8px">हिंदी | Hinglish</button>
         <div class="auth-buttons" th:if="${currentUser == null}">
             <a href="/login" class="btn btn-outline">Log in</a>
             <a href="/signup" class="btn btn-primary">Sign up</a>
@@ -113,6 +114,7 @@ function filterServices() {
 </script>
 <th:block th:replace="~{fragments/common :: hamburgerMenu}" />
 <script src="/js/pwa.js"></script>
+<script src="/js/i18n.js"></script>
 </body>
 </html>
 

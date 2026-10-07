@@ -21,13 +21,14 @@
         </a>
         <nav>
             <ul>
-                <li><a href="/" class="active">Home</a></li>
-                <li><a href="/services">Services</a></li>
+                <li><a href="/" class="active" th:text="#{nav.home}">Home</a></li>
+                <li><a href="/services" th:text="#{nav.services}">Services</a></li>
                 <li><a href="/request">Book Service</a></li>
                 <li><a href="/about">About</a></li>
                 <li><a href="/contact">Contact</a></li>
             </ul>
         </nav>
+        <button type="button" class="btn btn-outline btn-sm hlsp-lang-toggle" onclick="HLSPLang.cycle(this)" style="margin-right:8px">हिंदी | Hinglish</button>
         <div class="auth-buttons" th:if="${currentUser == null}">
             <a href="/login" class="btn btn-outline">Log in</a>
             <a href="/signup" class="btn btn-primary">Sign up</a>
@@ -43,7 +44,7 @@
 
 <section class="hero">
     <div class="container">
-        <h1>Your home deserves the best care</h1>
+        <h1 th:text="#{hero.title}">Your home deserves the best care</h1>
         <p>Book trusted, background-verified professionals for cleaning, repairs, wellness and more — all at your doorstep.</p>
         <div class="hero-search">
             <form id="serviceSearchForm" class="search-form">
@@ -160,5 +161,6 @@
 <script th:src="@{/js/main.js}"></script>
 <script th:src="@{/js/cart.js}"></script>
 <script src="/js/pwa.js"></script>
+<script src="/js/i18n.js"></script>
 </body>
 </html>
