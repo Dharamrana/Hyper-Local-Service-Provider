@@ -45,7 +45,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/", "/services", "/providers", "/provider/**",
                                 "/about", "/contact", "/login", "/signup", "/forgot-password", "/reset-password",
-                                "/css/**", "/js/**", "/h2-console/**",
+                                "/css/**", "/js/**", "/icons/**", "/manifest.webmanifest", "/sw.js", "/offline.html", "/h2-console/**",
                                 "/api/auth/**").permitAll()
                         .requestMatchers(HttpMethod.GET,
                                 "/api/services/**", "/api/providers/**",

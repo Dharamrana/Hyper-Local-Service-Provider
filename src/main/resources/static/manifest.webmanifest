@@ -1,0 +1,24 @@
+{
+  "name": "HLSP — Hyper Local Service Provider",
+  "short_name": "HLSP",
+  "description": "Book Electrician, Plumber, Carpenter, Cleaning & more in Premnagar & Suddowala. Verified local pros, OTP start, UPI/Cash.",
+  "id": "/?source=pwa",
+  "start_url": "/?source=pwa",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#ffffff",
+  "theme_color": "#0f6bff",
+  "lang": "en-IN",
+  "categories": ["utilities", "shopping"],
+  "icons": [
+    { "src": "/icons/icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" },
+    { "src": "/icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "/icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "/icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ],
+  "shortcuts": [
+    { "name": "Book a service", "url": "/services", "description": "Browse services" },
+    { "name": "My bookings", "url": "/requests", "description": "Track bookings" }
+  ]
+}

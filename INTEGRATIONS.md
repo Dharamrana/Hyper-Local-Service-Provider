@@ -22,7 +22,7 @@ Repo: **Hyper-Local-Service-Provider** (Spring Boot 3.2.5, Java 17, Thymeleaf, M
 - [x] Real payout split + provider wallet ledger — `wallet/WalletService` 80/20 split on completion, immutable `wallet_transactions`, settle + payout APIs (`/api/provider/wallet`). Monthly PDF statement is next micro-step
 - [x] Provider availability calendar — `availability/` slot overrides, leaves, capacity, booking gate; public slots API for wizard. (Job-pool accept timeout is next micro-step)
 - [x] Coupon engine + referral — `promo/PromoService` validate/redeem with caps, CouponRedemption audit, Referral PENDING→CREDITED on first completion, WhatsApp share link (`/api/promo/my-referral`)
-- [ ] PWA wrapper (manifest + service worker) for installable mobile use
+- [x] PWA wrapper — `manifest.webmanifest`, `sw.js` (network-first pages, cache-first static, offline page), install prompt + iOS hint, icons, shortcuts
 - [ ] Hindi/Hinglish i18n toggle + voice search
 
 ## Run
