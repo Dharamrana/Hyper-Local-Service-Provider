@@ -44,7 +44,7 @@ public class SecurityConfig {
                 .exceptionHandling(e -> e.authenticationEntryPoint(entryPoint))
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/", "/services", "/providers", "/provider/**",
-                                "/about", "/contact", "/login", "/signup",
+                                "/about", "/contact", "/login", "/signup", "/forgot-password", "/reset-password",
                                 "/css/**", "/js/**", "/h2-console/**",
                                 "/api/auth/**").permitAll()
                         .requestMatchers(HttpMethod.GET,

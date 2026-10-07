@@ -18,7 +18,7 @@ Repo: **Hyper-Local-Service-Provider** (Spring Boot 3.2.5, Java 17, Thymeleaf, M
 5. **Prod hardening** `.env.example`, secrets via env only, Actuator health, Premnagar seed providers (Vikram Rawat, Sunita Devi).
 
 ## Next (one-by-one, in order)
-- [ ] Phone OTP login (MSG91) + forgot-password token flow
+- [x] Phone OTP login (MSG91) + forgot-password token flow — `auth/OtpService`, `PhoneAuthController`, 5-min TTL, 5 attempts, 30s cooldown, hashed OTP, dev log mode
 - [ ] Real payout split + provider wallet ledger & monthly statement PDF
 - [ ] Provider availability calendar (replace single boolean) + accept timeout job pool
 - [ ] Coupon engine apply/redeem + referral (₹200 both sides)
