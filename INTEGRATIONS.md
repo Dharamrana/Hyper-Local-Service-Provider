@@ -1,0 +1,33 @@
+# HLSP — Market Integrations Roadmap
+
+Repo: **Hyper-Local-Service-Provider** (Spring Boot 3.2.5, Java 17, Thymeleaf, MySQL/H2, Redis)
+
+## Implemented in this push (scaffold, production-ready call sites)
+1. **Payments — Razorpay** `payment/PaymentService.java` + `PaymentWebhookController`
+   - Mock mode when `RAZORPAY_KEY_ID` blank (demo/viva), live orders when keys set.
+   - Webhook `/api/payments/webhook` with HMAC-SHA256 verify, invoice breakup = items + ₹49 visiting fee (GST-ready).
+2. **Notifications — WhatsApp-first** `notification/NotificationService.java`
+   - Booking confirm + provider new-job alerts, `wa.me` deep link fallback, log-only without token.
+   - Call sites ready for Meta Cloud API / MSG91 — fill `WHATSAPP_TOKEN` in `.env`.
+3. **Address + Maps** `model/Location.java` (houseNo, landmark, pincode, city, label) + `static/js/maps.js`
+   - OSM/Nominatim reverse geocode (free), GPS detect, Premnagar default (30.3429, 77.9620).
+   - Google Maps upgrades automatically when `GOOGLE_MAPS_API_KEY` is set.
+4. **Admin + KYC** `admin/AdminController.java`
+   - `/api/admin/stats`, `/api/admin/kyc/pending`, verify/reject. Protected by `ROLE_ADMIN`.
+   - Provider flow: register → unverified → admin verifies → visible in search.
+5. **Prod hardening** `.env.example`, secrets via env only, Actuator health, Premnagar seed providers (Vikram Rawat, Sunita Devi).
+
+## Next (one-by-one, in order)
+- [ ] Phone OTP login (MSG91) + forgot-password token flow
+- [ ] Real payout split + provider wallet ledger & monthly statement PDF
+- [ ] Provider availability calendar (replace single boolean) + accept timeout job pool
+- [ ] Coupon engine apply/redeem + referral (₹200 both sides)
+- [ ] PWA wrapper (manifest + service worker) for installable mobile use
+- [ ] Hindi/Hinglish i18n toggle + voice search
+
+## Run
+```bash
+cp .env.example .env   # fill keys as needed, blank = mock/demo mode
+mvn spring-boot:run -Dspring-boot.run.profiles=dev   # H2 + seed data
+# open http://localhost:8080
+```
