@@ -21,7 +21,7 @@ Repo: **Hyper-Local-Service-Provider** (Spring Boot 3.2.5, Java 17, Thymeleaf, M
 - [x] Phone OTP login (MSG91) + forgot-password token flow — `auth/OtpService`, `PhoneAuthController`, 5-min TTL, 5 attempts, 30s cooldown, hashed OTP, dev log mode
 - [x] Real payout split + provider wallet ledger — `wallet/WalletService` 80/20 split on completion, immutable `wallet_transactions`, settle + payout APIs (`/api/provider/wallet`). Monthly PDF statement is next micro-step
 - [x] Provider availability calendar — `availability/` slot overrides, leaves, capacity, booking gate; public slots API for wizard. (Job-pool accept timeout is next micro-step)
-- [ ] Coupon engine apply/redeem + referral (₹200 both sides)
+- [x] Coupon engine + referral — `promo/PromoService` validate/redeem with caps, CouponRedemption audit, Referral PENDING→CREDITED on first completion, WhatsApp share link (`/api/promo/my-referral`)
 - [ ] PWA wrapper (manifest + service worker) for installable mobile use
 - [ ] Hindi/Hinglish i18n toggle + voice search
 

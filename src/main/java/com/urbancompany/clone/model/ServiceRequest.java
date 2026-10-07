@@ -86,4 +86,9 @@ public class ServiceRequest {
 
     /** Gateway reference for the (mock) transaction. */
     private String paymentRef;
+
+    // --- Promo ---
+    private String couponCode;
+    private Double discountAmount;
+    private String referralCode;
 }

@@ -7,6 +7,8 @@ import com.urbancompany.clone.model.Location;
 import com.urbancompany.clone.repository.ServiceRepository;
 import com.urbancompany.clone.repository.ServiceProviderRepository;
 import com.urbancompany.clone.repository.UserRepository;
+import com.urbancompany.clone.model.Coupon;
+import com.urbancompany.clone.repository.CouponRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -25,6 +27,7 @@ public class DataInitializer {
             ServiceRepository serviceRepository,
             ServiceProviderRepository providerRepository,
             UserRepository userRepository,
+            CouponRepository couponRepository,
             PasswordEncoder passwordEncoder) {
         return args -> {
             if (serviceRepository.count() > 0) return;  // already seeded
@@ -40,6 +43,14 @@ public class DataInitializer {
                     new Service(null, "Painter", "Interior and exterior painting, wall texture, and finishing", 449.0, null, "https://images.unsplash.com/photo-1589939705384-5185137a7f0f?w=600&h=400&fit=crop", true)
             );
             serviceRepository.saveAll(services);
+
+            if (couponRepository.count() == 0) {
+                couponRepository.saveAll(Arrays.asList(
+                    new Coupon(null, "FIRST100", "₹100 off first order above ₹499", 0.0, 100.0, null, 499.0, null, null, true, null, 1, 0, true),
+                    new Coupon(null, "PREMNAGAR50", "Premnagar launch: 20% off up to ₹150", 20.0, null, 150.0, 349.0, null, null, true, null, 1, 0, false),
+                    new Coupon(null, "HLSP10", "10% off up to ₹100", 10.0, null, 100.0, 299.0, null, null, true, null, 1, 0, false)
+                ));
+            }
 
             List<User> users = Arrays.asList(
                     new User(null, "Rajesh Kumar", "rajesh@example.com", "9876543210", passwordEncoder.encode("password"), "CUSTOMER", new Location(28.6139, 77.2090, "New Delhi")),
