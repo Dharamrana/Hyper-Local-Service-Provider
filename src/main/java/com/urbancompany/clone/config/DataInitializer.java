@@ -73,7 +73,7 @@ public class DataInitializer {
                             "Licensed electrician specializing in LED lighting and residential wiring."),
 
                     new ServiceProvider(null, "Rameshwar Das", "rameshwar@example.com", "9876501236", providerPass, "PROVIDER",
-                            new Location(30.3255, 77.9405, "Kherigaon, Dehradun", "248001", "Near Kherigaon Main Road"), 4.6, 80, true, true,
+                            new Location(30.3255, 77.9405, "Kheri Gaon, Dehradun", "248001", "Near Kherigaon Main Road"), 4.6, 80, true, true,
                             "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=200&h=200&fit=crop&crop=face", Arrays.asList(3L),
                             Arrays.asList("Certified Plumber"), 8,
                             "Plumber with expertise in bathroom fitting and water line repair."),
@@ -103,7 +103,7 @@ public class DataInitializer {
                             "Specialist in appliance repair with quick turnaround time."),
 
                     new ServiceProvider(null, "Anil Kumar", "anil@example.com", "9876501241", providerPass, "PROVIDER",
-                            new Location(30.3255, 77.9405, "Kherigaon, Dehradun", "248001", "Near Kherigaon Main Road"), 4.4, 90, true, true,
+                            new Location(30.3255, 77.9405, "Kheri Gaon, Dehradun", "248001", "Near Kherigaon Main Road"), 4.4, 90, true, true,
                             "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=200&h=200&fit=crop&crop=face", Arrays.asList(8L),
                             Arrays.asList("Licensed Painter", "Wall Texture Expert"), 12,
                             "Licensed painter with 12 years of experience in interior and exterior painting.")

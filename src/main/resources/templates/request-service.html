@@ -11,6 +11,7 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <link rel="apple-touch-icon" href="/icons/icon-192.png">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
 </head>
 <body>
 <header>
@@ -141,14 +142,36 @@
                                 <textarea id="customerAddress" name="customerAddress" rows="2" required></textarea>
                             </div>
                         </div>
+                        <!-- Rapido-style Select on Map: drag map under fixed pin -->
+                        <div class="form-group" style="margin-top:14px">
+                            <label>Select on map <span style="font-weight:400;color:#777">(drag the map — pin stays in centre, like Rapido)</span></label>
+                            <input type="search" id="mapSearch" class="hlsp-map-search" placeholder="Search area — Prem Nagar, Suddowala, Kheri Gaon…" list="hlspAreas" autocomplete="off">
+                            <datalist id="hlspAreas"><option value="Prem Nagar"></option><option value="Suddowala"></option><option value="Kheri Gaon"></option><option value="Ballupur"></option><option value="Vasant Vihar"></option><option value="Rajpur Road"></option><option value="Clement Town"></option><option value="Sahastradhara Road"></option></datalist>
+                            <div class="hlsp-map-wrap"><div id="bookingMap" class="hlsp-map"></div></div>
+                            <div class="hlsp-map-card">
+                                <span id="selectedLocationLabel" class="hlsp-map-label">Selected: Prem Nagar · 30.34290, 77.96200</span>
+                                <button type="button" class="btn btn-outline btn-sm" id="useCurrentLocation"><i class="fas fa-location-crosshairs"></i> Use current location</button>
+                                <button type="button" class="btn btn-primary btn-sm" id="confirmMapLocation"><i class="fas fa-check"></i> Confirm location</button>
+                            </div>
+                            <div class="hlsp-chips">
+                                <button type="button" data-area="Prem Nagar">Prem Nagar</button>
+                                <button type="button" data-area="Suddowala">Suddowala</button>
+                                <button type="button" data-area="Kheri Gaon">Kheri Gaon</button>
+                                <button type="button" data-area="Ballupur">Ballupur</button>
+                                <button type="button" data-area="Vasant Vihar">Vasant Vihar</button>
+                                <button type="button" data-area="Rajpur Road">Rajpur Road</button>
+                                <button type="button" data-area="Clement Town">Clement Town</button>
+                                <button type="button" data-area="Sahastradhara Road">Sahastradhara Road</button>
+                            </div>
+                        </div>
                         <div class="form-row">
                             <div class="form-group">
                                 <label for="lat">Latitude *</label>
-                                <input type="number" step="0.000001" id="lat" name="lat" required placeholder="e.g. 28.6139">
+                                <input type="number" step="0.000001" id="lat" name="lat" required value="30.3429">
                             </div>
                             <div class="form-group">
                                 <label for="lng">Longitude *</label>
-                                <input type="number" step="0.000001" id="lng" name="lng" required placeholder="e.g. 77.2090">
+                                <input type="number" step="0.000001" id="lng" name="lng" required value="77.9620">
                             </div>
                         </div>
                     </div>
@@ -204,6 +227,8 @@
 
 <script th:src="@{/js/main.js}"></script>
 <script th:src="@{/js/cart.js}"></script>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script th:src="@{/js/maps.js}"></script>
 <script th:src="@{/js/booking.js}"></script>
 <th:block th:replace="~{fragments/common :: hamburgerMenu}" />
 <script src="/js/pwa.js"></script>

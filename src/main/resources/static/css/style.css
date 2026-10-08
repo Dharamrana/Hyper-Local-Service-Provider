@@ -1877,3 +1877,16 @@ footer {
         width: 280px;
     }
 }
+
+
+/* ===== Rapido-style Select on Map (fixed centre pin) ===== */
+.hlsp-map-wrap { position: relative; border-radius: var(--radius); overflow: hidden; border: 1px solid var(--border); }
+.hlsp-map { height: 340px; width: 100%; }
+.hlsp-center-pin { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -100%); z-index: 500; pointer-events: none; color: #e8650a; font-size: 40px; line-height: 1; filter: drop-shadow(0 4px 6px rgba(0,0,0,.35)); }
+.hlsp-center-pin .hlsp-pin-shadow { display: block; width: 14px; height: 5px; margin: 2px auto 0; border-radius: 50%; background: rgba(0,0,0,.3); }
+.hlsp-map-card { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; margin-top: 10px; }
+.hlsp-map-label { font-weight: 600; font-size: 14px; }
+.hlsp-chips { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 8px; }
+.hlsp-chips button { border: 1px solid var(--border); background: #fff; border-radius: 999px; padding: 5px 12px; font: inherit; font-size: 13px; cursor: pointer; }
+.hlsp-chips button.active { background: #e8650a; color: #fff; border-color: #e8650a; }
+.hlsp-map-search { width: 100%; margin-bottom: 8px; }

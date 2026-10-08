@@ -180,8 +180,8 @@ function tryAutoLocate() {
 
 function loadProviders() {
     var serviceId = isCartMode() ? cartFirstServiceId() : document.getElementById('serviceId').value;
-    var lat = document.getElementById('lat').value || 28.6139;
-    var lng = document.getElementById('lng').value || 77.2090;
+    var lat = document.getElementById('lat').value || 30.3429;
+    var lng = document.getElementById('lng').value || 77.9620;
 
     if (!serviceId) {
         document.getElementById('providerSelectionGroup').style.display = 'none';
@@ -215,8 +215,8 @@ function loadProviders() {
 }
 
 function autoSelectNearest() {
-    var lat = document.getElementById('lat').value || 28.6139;
-    var lng = document.getElementById('lng').value || 77.2090;
+    var lat = document.getElementById('lat').value || 30.3429;
+    var lng = document.getElementById('lng').value || 77.9620;
     var serviceId = isCartMode() ? cartFirstServiceId() : document.getElementById('serviceId').value;
 
     if (!serviceId) return;
@@ -399,3 +399,58 @@ function submitBooking() {
             showNotification(error.message || 'There was an error submitting your request.', 'error');
         });
 }
+
+
+// ---------- Rapido-style Select on Map wiring ----------
+(function () {
+    function initPicker() {
+        var mapEl = document.getElementById('bookingMap');
+        if (!mapEl || typeof HLSPMaps === 'undefined' || window.__hlspPicker) return;
+        var picker = HLSPMaps.initRapidoPicker('bookingMap', {
+            latEl: 'lat', lngEl: 'lng', addressEl: 'customerAddress',
+            labelEl: 'selectedLocationLabel',
+            onConfirm: function (loc) {
+                const el = document.getElementById('selectedLocationLabel');
+                if (el) el.textContent = 'Confirmed: ' + loc.label.replace(/^Selected: /, '');
+                if (typeof showNotification === 'function') showNotification('Location confirmed: ' + loc.label, 'success');
+            }
+        });
+        if (!picker) return;
+        window.__hlspPicker = picker;
+        window.hlspRefreshNearbyFromPin = function () { /* providers list refreshes from lat/lng already entered */ };
+
+        var addrEl = document.getElementById('customerAddress');
+        addrEl.addEventListener('input', function () { addrEl.dataset.userEdited = '1'; });
+
+        // locality chips
+        document.querySelectorAll('.hlsp-chips button[data-area]').forEach(function (btn) {
+            btn.addEventListener('click', function () {
+                var loc = HLSPMaps.LOCALITIES.find(function (l) { return l.label === btn.dataset.area; });
+                if (!loc) return;
+                document.querySelectorAll('.hlsp-chips button').forEach(function (x) { x.classList.remove('active'); });
+                btn.classList.add('active');
+                picker.flyTo(loc.lat, loc.lng, loc.label);
+                setTimeout(function () { picker.confirm(); }, 700);
+            });
+        });
+        // search
+        var search = document.getElementById('mapSearch');
+        search.addEventListener('change', function () {
+            var q = search.value.trim().toLowerCase();
+            var loc = HLSPMaps.LOCALITIES.find(function (l) { return l.label.toLowerCase() === q; })
+                   || HLSPMaps.LOCALITIES.find(function (l) { return l.label.toLowerCase().includes(q); });
+            if (loc) { picker.flyTo(loc.lat, loc.lng, loc.label); }
+        });
+        // GPS
+        document.getElementById('useCurrentLocation').addEventListener('click', function () {
+            if (!navigator.geolocation) { alert('Geolocation not available on this device.'); return; }
+            navigator.geolocation.getCurrentPosition(function (pos) {
+                picker.flyTo(pos.coords.latitude, pos.coords.longitude, 'Your location');
+                setTimeout(function () { picker.confirm(); }, 700);
+            }, function () { alert('Could not get your location — drag the map or pick an area.'); });
+        });
+        document.getElementById('confirmMapLocation').addEventListener('click', function () { picker.confirm(); });
+    }
+    document.addEventListener('DOMContentLoaded', initPicker);
+    setTimeout(initPicker, 600); // wizard panes render late
+})();

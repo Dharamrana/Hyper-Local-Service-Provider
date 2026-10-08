@@ -152,7 +152,7 @@ function saveNewAddress() {
     var text = (document.getElementById('addrText').value || '').trim();
     if (!text) { showNotification('Please enter an address', 'error'); return; }
     var addrs = getAddresses();
-    addrs.push({ label: label || 'Address ' + (addrs.length + 1), text: text, lat: 28.6139, lng: 77.2090 });
+    addrs.push({ label: label || 'Address ' + (addrs.length + 1), text: text, lat: 30.3429, lng: 77.9620 });
     saveAddresses(addrs);
     renderAddressBook();
     var form = document.querySelector('.address-form');
@@ -171,7 +171,7 @@ function selectAddress(idx) {
     var addrs = getAddresses();
     if (!addrs[idx]) return;
     var a = addrs[idx];
-    setLocation(a.lat || 28.6139, a.lng || 77.2090, a.text);
+    setLocation(a.lat || 30.3429, a.lng || 77.9620, a.text);
     closeSideMenu();
     showNotification('Location set to: ' + a.label, 'success');
 }
@@ -227,9 +227,9 @@ function setManualLocation() {
     if (!text) { showNotification('Enter an address', 'error'); return; }
     // Save to saved locations
     var addrs = getAddresses();
-    addrs.push({ label: text.split(',')[0] || text, text: text, lat: 28.6139, lng: 77.2090 });
+    addrs.push({ label: text.split(',')[0] || text, text: text, lat: 30.3429, lng: 77.9620 });
     saveAddresses(addrs);
-    setLocation(28.6139, 77.2090, text);
+    setLocation(30.3429, 77.9620, text);
     input.value = '';
     document.getElementById('locationPanel').classList.remove('open');
     showNotification('Location set', 'success');
@@ -255,7 +255,7 @@ function pickSavedLocation(idx) {
     var addrs = getAddresses();
     if (!addrs[idx]) return;
     var a = addrs[idx];
-    setLocation(a.lat || 28.6139, a.lng || 77.2090, a.text);
+    setLocation(a.lat || 30.3429, a.lng || 77.9620, a.text);
     document.getElementById('locationPanel').classList.remove('open');
     showNotification('Location set to: ' + (a.label || a.text), 'success');
 }
