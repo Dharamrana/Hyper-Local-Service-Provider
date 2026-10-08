@@ -53,57 +53,57 @@ public class DataInitializer {
             }
 
             List<User> users = Arrays.asList(
-                    new User(null, "Rajesh Kumar", "rajesh@example.com", "9876543210", passwordEncoder.encode("password"), "CUSTOMER", new Location(28.6139, 77.2090, "New Delhi")),
-                    new User(null, "Priya Sharma", "priya@example.com", "9876543211", passwordEncoder.encode("password"), "CUSTOMER", new Location(28.6140, 77.2091, "New Delhi"))
+                    new User(null, "Rajesh Kumar", "rajesh@example.com", "9876543210", passwordEncoder.encode("password"), "CUSTOMER", new Location(30.3429, 77.9620, "Premnagar, Dehradun", "248007", "Near Premnagar Market")),
+                    new User(null, "Priya Sharma", "priya@example.com", "9876543211", passwordEncoder.encode("password"), "CUSTOMER", new Location(30.3350, 77.9550, "Suddowala, Dehradun", "248015", "Near Suddowala Chowk"))
             );
             userRepository.saveAll(users);
 
             String providerPass = passwordEncoder.encode("provider123");
             List<ServiceProvider> providers = Arrays.asList(
                     new ServiceProvider(null, "Amit Verma", "amit@example.com", "9876501234", providerPass, "PROVIDER",
-                            new Location(28.6150, 77.2080, "Connaught Place, Delhi"), 4.8, 120, true, true,
+                            new Location(30.3429, 77.9620, "Premnagar, Dehradun", "248007", "Near Premnagar Market"), 4.8, 120, true, true,
                             "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&h=200&fit=crop&crop=face", Arrays.asList(1L, 8L),
                             Arrays.asList("Certified Carpenter", "Furniture Making"), 10,
                             "Experienced carpenter with 10+ years in furniture making and repair."),
 
                     new ServiceProvider(null, "Sneha Gupta", "sneha@example.com", "9876501235", providerPass, "PROVIDER",
-                            new Location(28.6145, 77.2095, "Karol Bagh, Delhi"), 4.7, 95, true, true,
+                            new Location(30.3350, 77.9550, "Suddowala, Dehradun", "248015", "Near Suddowala Chowk"), 4.7, 95, true, true,
                             "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=200&h=200&fit=crop&crop=face", Arrays.asList(2L),
                             Arrays.asList("Licensed Electrician", "LED Specialist"), 7,
                             "Licensed electrician specializing in LED lighting and residential wiring."),
 
                     new ServiceProvider(null, "Rameshwar Das", "rameshwar@example.com", "9876501236", providerPass, "PROVIDER",
-                            new Location(28.6100, 77.2100, "Lajpat Nagar, Delhi"), 4.6, 80, true, true,
+                            new Location(30.3255, 77.9405, "Kherigaon, Dehradun", "248001", "Near Kherigaon Main Road"), 4.6, 80, true, true,
                             "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=200&h=200&fit=crop&crop=face", Arrays.asList(3L),
                             Arrays.asList("Certified Plumber"), 8,
                             "Plumber with expertise in bathroom fitting and water line repair."),
 
                     new ServiceProvider(null, "Pooja Srivastava", "pooja@example.com", "9876501237", providerPass, "PROVIDER",
-                            new Location(28.6200, 77.2050, "Defence Colony, Delhi"), 4.9, 150, true, true,
+                            new Location(30.3480, 77.9700, "Ballupur, Dehradun", "248001", "Near Ballupur Chowk"), 4.9, 150, true, true,
                             "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=200&h=200&fit=crop&crop=face", Arrays.asList(4L),
                             Arrays.asList("Certified Massage Therapist", "Yoga Instructor"), 6,
                             "Certified massage therapist offering therapeutic and relaxation massages."),
 
                     new ServiceProvider(null, "Manoj Tiwari", "manoj@example.com", "9876501238", providerPass, "PROVIDER",
-                            new Location(28.6050, 77.2150, "Saket, Delhi"), 4.3, 65, true, false,
+                            new Location(30.3550, 77.9900, "Kaulagarh, Dehradun", "248003", "Near Kaulagarh Road"), 4.3, 65, true, false,
                             "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=200&h=200&fit=crop&crop=face", Arrays.asList(5L),
                             Arrays.asList("Professional Cleaner"), 5,
                             "Professional cleaner with experience in residential and commercial cleaning."),
 
                     new ServiceProvider(null, "Deepak Chauhan", "deepak@example.com", "9876501239", providerPass, "PROVIDER",
-                            new Location(28.6000, 77.2100, "Mehrauli, Delhi"), 4.5, 70, true, true,
+                            new Location(30.3429, 77.9620, "Premnagar, Dehradun", "248007", "Near Premnagar Market"), 4.5, 70, true, true,
                             "https://images.unsplash.com/photo-1560250097-0b93528c311a?w=200&h=200&fit=crop&crop=face", Arrays.asList(6L),
                             Arrays.asList("AC Certified Technician"), 9,
                             "AC technician certified with 9 years of experience in all major brands."),
 
                     new ServiceProvider(null, "Kavita Mishra", "kavita@example.com", "9876501240", providerPass, "PROVIDER",
-                            new Location(28.6180, 77.2050, "Hauz Khas, Delhi"), 4.2, 55, true, true,
+                            new Location(30.3350, 77.9550, "Suddowala, Dehradun", "248015", "Near Suddowala Chowk"), 4.2, 55, true, true,
                             "https://images.unsplash.com/photo-1580489944761-15a19d654956?w=200&h=200&fit=crop&crop=face", Arrays.asList(7L),
                             Arrays.asList("Appliance Repair Specialist"), 6,
                             "Specialist in appliance repair with quick turnaround time."),
 
                     new ServiceProvider(null, "Anil Kumar", "anil@example.com", "9876501241", providerPass, "PROVIDER",
-                            new Location(28.6070, 77.2200, "Greater Kailash, Delhi"), 4.4, 90, true, true,
+                            new Location(30.3255, 77.9405, "Kherigaon, Dehradun", "248001", "Near Kherigaon Main Road"), 4.4, 90, true, true,
                             "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=200&h=200&fit=crop&crop=face", Arrays.asList(8L),
                             Arrays.asList("Licensed Painter", "Wall Texture Expert"), 12,
                             "Licensed painter with 12 years of experience in interior and exterior painting.")

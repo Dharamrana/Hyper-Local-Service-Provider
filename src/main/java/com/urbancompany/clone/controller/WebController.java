@@ -53,8 +53,8 @@ public class WebController {
     @GetMapping("/providers")
     public String providersPage(
             @RequestParam Long serviceId,
-            @RequestParam(defaultValue = "28.6139") Double lat,
-            @RequestParam(defaultValue = "77.2090") Double lng,
+            @RequestParam(defaultValue = "30.3429") Double lat,
+            @RequestParam(defaultValue = "77.9620") Double lng,
             @RequestParam(defaultValue = "10") Integer limit,
             Model model) {
 
