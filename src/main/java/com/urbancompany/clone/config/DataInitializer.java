@@ -33,12 +33,12 @@ public class DataInitializer {
             if (serviceRepository.count() > 0) return;  // already seeded
 
             List<Service> services = Arrays.asList(
-                    new Service(null, "Carpenter", "Furniture repair, installation, and custom woodwork", 499.0, null, "https://images.unsplash.com/photo-1558618666-fcd25c85f82e?w=600&h=400&fit=crop", true),
+                    new Service(null, "Carpenter", "Furniture repair, installation, and custom woodwork", 499.0, null, "https://images.unsplash.com/photo-1611058759056-41c8ce0ee72d?w=800&auto=format&fit=crop", true),
                     new Service(null, "Electrician", "Electrical wiring, switch/socket repair, light fixture installation", 399.0, null, "https://images.unsplash.com/photo-1621905251189-08b45d6a269e?w=600&h=400&fit=crop", true),
                     new Service(null, "Plumber", "Pipe repair, leak fixing, bathroom fitting, and water line services", 349.0, null, "https://images.unsplash.com/photo-1585704032915-c3400ca199e7?w=600&h=400&fit=crop", true),
                     new Service(null, "Massage Therapist", "Professional massage therapy for relaxation and wellness", 799.0, null, "https://images.unsplash.com/photo-1544161515-4ab6ce6db874?w=600&h=400&fit=crop", true),
                     new Service(null, "House Cleaning", "Deep cleaning, vacuuming, dusting, and mopping services", 499.0, null, "https://images.unsplash.com/photo-1581578731548-c64695cc6952?w=600&h=400&fit=crop", true),
-                    new Service(null, "AC Repair", "Air conditioner servicing, installation, and repair", 699.0, null, "https://images.unsplash.com/photo-1631545806609-3c480b4c2986?w=600&h=400&fit=crop", true),
+                    new Service(null, "AC Repair", "Air conditioner servicing, installation, and repair", 699.0, null, "https://images.unsplash.com/photo-1621905252507-b35492cc74b4?w=800&auto=format&fit=crop", true),
                     new Service(null, "Appliance Repair", "Washing machine, refrigerator, microwave oven repair", 599.0, null, "https://images.unsplash.com/photo-1590794056226-79ef3a8147e1?w=600&h=400&fit=crop", true),
                     new Service(null, "Painter", "Interior and exterior painting, wall texture, and finishing", 449.0, null, "https://images.unsplash.com/photo-1589939705384-5185137a7f0f?w=600&h=400&fit=crop", true)
             );
