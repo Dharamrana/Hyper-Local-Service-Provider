@@ -8,6 +8,8 @@ Book verified Electricians, Plumbers, Carpenters, Cleaners, AC Technicians & mor
 
 ![Stack](https://img.shields.io/badge/Java-17-orange) ![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.2.5-brightgreen) ![Thymeleaf](https://img.shields.io/badge/Thymeleaf-SSR-blue) ![MySQL](https://img.shields.io/badge/MySQL-8-blue) ![Redis](https://img.shields.io/badge/Redis-cache-red) ![Razorpay](https://img.shields.io/badge/Payments-Razorpay-0f52ff)
 
+> **Live demo:** https://hyper-local-service-provider.onrender.com — free tier, first load after idle can take ~30s to wake. Runs the `dev` profile (H2 seed data, mock payments), so no real keys are needed to try the full booking flow.
+
 ---
 
 ## Table of Contents
