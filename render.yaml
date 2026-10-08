@@ -1,0 +1,11 @@
+services:
+  - type: web
+    name: hyper-local-service-provider
+    env: docker
+    plan: free
+    healthCheckPath: /
+    envVars:
+      - key: SPRING_PROFILES_ACTIVE
+        value: dev
+      # PORT is set automatically by Render; the app now binds to ${PORT:8080}
+      # All integration keys stay blank = mock/demo mode (Razorpay mock, WhatsApp log-only, OTP dev log)
