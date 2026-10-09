@@ -1890,3 +1890,13 @@ footer {
 .hlsp-chips button { border: 1px solid var(--border); background: #fff; border-radius: 999px; padding: 5px 12px; font: inherit; font-size: 13px; cursor: pointer; }
 .hlsp-chips button.active { background: #e8650a; color: #fff; border-color: #e8650a; }
 .hlsp-map-search { width: 100%; margin-bottom: 8px; }
+
+
+/* ===== Role selector (Login / Register) ===== */
+.hlsp-role-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin: 0 0 16px; }
+.hlsp-role-card { border: 2px solid var(--border); background: #fff; border-radius: var(--radius); padding: 14px 8px; cursor: pointer; font: inherit; text-align: center; }
+.hlsp-role-card i { font-size: 22px; display: block; margin-bottom: 6px; color: var(--accent); }
+.hlsp-role-card b { display: block; font-size: 14px; }
+.hlsp-role-card small { color: var(--ink-light); font-size: 11px; }
+.hlsp-role-card.active { border-color: var(--accent); background: #fff4ec; box-shadow: var(--shadow-sm); }
+@media (max-width: 520px) { .hlsp-role-grid { grid-template-columns: 1fr; } }

@@ -54,6 +54,13 @@
                 <div th:if="${param.logout}" class="auth-ok">
                     You have been logged out.
                 </div>
+                <label style="display:block;font-weight:600;margin-bottom:8px">I am signing in as</label>
+                <div class="hlsp-role-grid" role="radiogroup" aria-label="Select your role">
+                    <button type="button" class="hlsp-role-card active" data-role="CUSTOMER" onclick="hlspSetRole(this)"><i class="fas fa-user"></i><b>Customer</b><small>Book services</small></button>
+                    <button type="button" class="hlsp-role-card" data-role="PROVIDER" onclick="hlspSetRole(this)"><i class="fas fa-tools"></i><b>Service Provider</b><small>Get jobs &amp; earn</small></button>
+                    <button type="button" class="hlsp-role-card" data-role="ADMIN" onclick="hlspSetRole(this)"><i class="fas fa-shield-alt"></i><b>Admin</b><small>Manage platform</small></button>
+                </div>
+                <p id="roleHint" class="hlsp-map-label" style="margin-bottom:14px">Customer: browse &amp; book trusted local pros.</p>
                 <div class="form-section">
                     <div class="form-group">
                         <label for="username">Email address</label>
@@ -80,6 +87,26 @@
         </div>
     </div>
 </footer>
+<script>
+var HLSP_ROLE = new URLSearchParams(window.location.search).get('role') || 'CUSTOMER';
+var ROLE_HINTS = {
+    CUSTOMER: 'Customer: browse & book trusted local pros.',
+    PROVIDER: 'Service Provider: log in to your Partner Portal - jobs, OTP start, wallet & earnings.',
+    ADMIN: 'Admin: log in to the Admin Dashboard - KYC verification, providers, platform analytics.'
+};
+function hlspSetRole(btn) {
+    document.querySelectorAll('.hlsp-role-card').forEach(function(b){ b.classList.remove('active'); });
+    btn.classList.add('active');
+    HLSP_ROLE = btn.dataset.role;
+    var hint = document.getElementById('roleHint');
+    if (hint) hint.textContent = ROLE_HINTS[HLSP_ROLE];
+}
+document.addEventListener('DOMContentLoaded', function() {
+    document.querySelectorAll('.hlsp-role-card').forEach(function(b){
+        if (b.dataset.role === HLSP_ROLE) hlspSetRole(b);
+    });
+});
+</script>
 <script src="/js/pwa.js"></script>
 <script src="/js/i18n.js"></script>
 </body>

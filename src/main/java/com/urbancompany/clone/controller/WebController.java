@@ -163,6 +163,15 @@ public class WebController {
                 .findFirst().orElse("");
     }
 
+    /** Admin dashboard: platform analytics, KYC queue, provider controls (ROLE_ADMIN only). */
+    @GetMapping("/admin")
+    public String adminDashboard(Authentication authentication) {
+        if (authentication == null || !"ADMIN".equals(roleOf(authentication))) {
+            return "redirect:/login";
+        }
+        return "admin";
+    }
+
     @GetMapping("/about")
     public String aboutPage() {
         return "about";

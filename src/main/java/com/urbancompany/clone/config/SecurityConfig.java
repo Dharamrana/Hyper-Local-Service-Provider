@@ -58,13 +58,20 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.PUT, "/api/requests/**").authenticated()
                         .requestMatchers(HttpMethod.DELETE, "/api/requests/**").authenticated()
                         .requestMatchers("/api/requests", "/api/requests/**").authenticated()
+                        .requestMatchers("/admin", "/admin/**").hasRole("ADMIN")
                         .requestMatchers("/api/admin/**").hasRole("ADMIN")
                         .requestMatchers("/api/payments/webhook", "/api/payments/config").permitAll()
                         .requestMatchers("/api/users/**").authenticated()
                         .anyRequest().permitAll())
                 .formLogin(form -> form
                         .loginPage("/login")
-                        .defaultSuccessUrl("/", true)
+                        .successHandler((request, response, authentication) -> {
+                            boolean admin = authentication.getAuthorities().stream()
+                                    .anyMatch(a -> "ROLE_ADMIN".equals(a.getAuthority()));
+                            boolean provider = authentication.getAuthorities().stream()
+                                    .anyMatch(a -> "ROLE_PROVIDER".equals(a.getAuthority()));
+                            response.sendRedirect(admin ? "/admin" : provider ? "/provider-portal" : "/");
+                        })
                         .permitAll())
                 .logout(logout -> logout
                         .logoutSuccessUrl("/?logout")

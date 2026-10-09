@@ -48,6 +48,13 @@
         <div class="booking-form-container">
             <form id="signupForm" class="booking-form" onsubmit="return false;">
                 <div id="signupError" class="auth-error" style="display:none"></div>
+                <label style="display:block;font-weight:600;margin-bottom:8px">I am joining as</label>
+                <div class="hlsp-role-grid" role="radiogroup" aria-label="Select your role">
+                    <button type="button" class="hlsp-role-card active" data-role="CUSTOMER" onclick="hlspSetRole(this)"><i class="fas fa-user"></i><b>Customer</b><small>Book services</small></button>
+                    <button type="button" class="hlsp-role-card" data-role="PROVIDER" onclick="hlspSetRole(this)"><i class="fas fa-tools"></i><b>Service Provider</b><small>Get jobs &amp; earn</small></button>
+                    <button type="button" class="hlsp-role-card" data-role="ADMIN" onclick="hlspSetRole(this)"><i class="fas fa-shield-alt"></i><b>Admin</b><small>Manage platform</small></button>
+                </div>
+                <p id="roleHint" class="hlsp-map-label" style="margin-bottom:14px">Customer: browse &amp; book trusted local pros.</p>
                 <div class="form-section">
                     <div class="form-row">
                         <div class="form-group">
@@ -62,6 +69,14 @@
                     <div class="form-group">
                         <label for="email">Email address</label>
                         <input type="email" id="email" required autocomplete="email" placeholder="you@example.com">
+                    </div>
+                    <div class="form-group" id="providerServiceRow" style="display:none">
+                        <label for="providerService">Your main service (KYC verification required before jobs)</label>
+                        <select id="providerService">
+                            <option>Electrician</option><option>Plumber</option><option>Carpenter</option>
+                            <option>House Cleaning</option><option>AC Repair</option><option>Appliance Repair</option>
+                            <option>Painter</option><option>Massage Therapist</option>
+                        </select>
                     </div>
                     <div class="form-group">
                         <label for="password">Password (min 6 characters)</label>
@@ -90,6 +105,7 @@ function submitSignup() {
     var err = document.getElementById('signupError');
     err.style.display = 'none';
     var payload = {
+        role: (typeof HLSP_ROLE !== 'undefined' ? HLSP_ROLE : 'CUSTOMER'),
         name: document.getElementById('name').value.trim(),
         phone: document.getElementById('phone').value.trim(),
         email: document.getElementById('email').value.trim(),
@@ -108,8 +124,9 @@ function submitSignup() {
             }
             return response.json();
         })
-        .then(function() {
-            var next = new URLSearchParams(window.location.search).get('next') || '/';
+        .then(function(data) {
+            var qs = new URLSearchParams(window.location.search);
+            var next = qs.get('next') || (data.role === 'PROVIDER' ? '/provider-portal' : data.role === 'ADMIN' ? '/admin' : '/');
             window.location.href = next;
         })
         .catch(function(e) {
@@ -117,6 +134,28 @@ function submitSignup() {
             err.style.display = 'block';
         });
 }
+</script>
+<script>
+var HLSP_ROLE = new URLSearchParams(window.location.search).get('role') || 'CUSTOMER';
+var ROLE_HINTS = {
+    CUSTOMER: 'Customer: browse & book trusted local pros.',
+    PROVIDER: 'Service Provider: log in to your Partner Portal - jobs, OTP start, wallet & earnings.',
+    ADMIN: 'Admin: log in to the Admin Dashboard - KYC verification, providers, platform analytics.'
+};
+function hlspSetRole(btn) {
+    document.querySelectorAll('.hlsp-role-card').forEach(function(b){ b.classList.remove('active'); });
+    btn.classList.add('active');
+    HLSP_ROLE = btn.dataset.role;
+    var hint = document.getElementById('roleHint');
+    var svc = document.getElementById('providerServiceRow');
+    if (svc) svc.style.display = (HLSP_ROLE === 'PROVIDER') ? 'block' : 'none';
+    if (hint) hint.textContent = ROLE_HINTS[HLSP_ROLE];
+}
+document.addEventListener('DOMContentLoaded', function() {
+    document.querySelectorAll('.hlsp-role-card').forEach(function(b){
+        if (b.dataset.role === HLSP_ROLE) hlspSetRole(b);
+    });
+});
 </script>
 <script src="/js/pwa.js"></script>
 <script src="/js/i18n.js"></script>

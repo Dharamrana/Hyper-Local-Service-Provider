@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard — UrbanService</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="manifest" href="/manifest.webmanifest">
+    <meta name="theme-color" content="#0f6bff">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body>
+<header>
+    <div class="container">
+        <a href="/" class="logo"><i class="fas fa-tools"></i><span>UrbanService</span></a>
+        <nav>
+            <ul>
+                <li><a href="/">Home</a></li>
+                <li><a href="/services">Services</a></li>
+                <li><a href="/request">Book Service</a></li>
+                <li><a href="/about">About</a></li>
+                <li><a href="/contact">Contact</a></li>
+            </ul>
+        </nav>
+        <div class="auth-buttons logged-in">
+            <span class="user-greet">Admin</span>
+            <form th:action="@{/logout}" method="post" style="display:inline">
+                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+                <button type="submit" class="btn btn-outline btn-sm">Log out</button>
+            </form>
+        </div>
+    </div>
+</header>
+
+<section class="page-header">
+    <div class="container">
+        <h1>Admin Dashboard</h1>
+        <p>Platform analytics, KYC verification &amp; provider management — Dehradun (Prem Nagar · Suddowala · Kheri Gaon)</p>
+    </div>
+</section>
+
+<section class="booking-form-section">
+    <div class="container">
+        <div id="adminError" class="auth-error" style="display:none"></div>
+
+        <div class="stats-grid" id="statsGrid">
+            <div class="stat-card"><div class="stat-value" id="statUsers">–</div><div class="stat-label">Total users</div></div>
+            <div class="stat-card"><div class="stat-value" id="statProviders">–</div><div class="stat-label">Total providers</div></div>
+            <div class="stat-card"><div class="stat-value" id="statBookings">–</div><div class="stat-label">Total bookings</div></div>
+            <div class="stat-card"><div class="stat-value" id="statRevenue">–</div><div class="stat-label">Platform revenue</div></div>
+            <div class="stat-card"><div class="stat-value" id="statPendingKyc">–</div><div class="stat-label">Pending KYC</div></div>
+        </div>
+
+        <div class="form-section" style="margin-top:24px">
+            <h2><i class="fas fa-id-card"></i> KYC verification queue</h2>
+            <p style="color:#777;margin-bottom:12px">Providers here signed up and are waiting for approval. Verify to make them bookable, or reject.</p>
+            <div id="kycList"><p>Loading pending KYC…</p></div>
+        </div>
+
+        <div class="form-section" style="margin-top:24px">
+            <h2><i class="fas fa-users-cog"></i> Provider management</h2>
+            <div class="form-row" style="margin-bottom:12px">
+                <div class="form-group" style="flex:2">
+                    <input type="search" id="provSearch" placeholder="Search by name, email or area…" oninput="renderProviders()">
+                </div>
+                <div class="form-group" style="flex:1">
+                    <select id="provFilter" onchange="renderProviders()">
+                        <option value="ALL">All statuses</option>
+                        <option value="VERIFIED">Verified</option>
+                        <option value="PENDING">Pending KYC</option>
+                    </select>
+                </div>
+            </div>
+            <div style="overflow-x:auto">
+                <table class="admin-table" style="width:100%;border-collapse:collapse">
+                    <thead><tr>
+                        <th align="left">Provider</th><th align="left">Area</th><th align="left">Rating</th>
+                        <th align="left">KYC</th><th align="left">Available</th><th align="left">Actions</th>
+                    </tr></thead>
+                    <tbody id="provRows"><tr><td colspan="6">Loading providers…</td></tr></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</section>
+
+<footer>
+    <div class="container"><div class="footer-bottom"><p>&copy; 2024 UrbanService. All rights reserved.</p></div></div>
+</footer>
+
+<script>
+var ALL_PROVIDERS = [];
+function money(n){ return '₹' + Number(n || 0).toLocaleString('en-IN'); }
+function fail(msg){ var e=document.getElementById('adminError'); e.textContent=msg; e.style.display='block'; }
+function kycBadge(v){ return v ? '<span class="badge" style="color:#2d8a4e;font-weight:700">APPROVED</span>' : '<span class="badge" style="color:#c77c14;font-weight:700">PENDING</span>'; }
+
+function loadStats(){
+    fetch('/api/admin/stats').then(function(r){ if(!r.ok) throw new Error('Stats failed ('+r.status+')'); return r.json(); })
+    .then(function(s){
+        document.getElementById('statUsers').textContent = s.totalUsers ?? s.users ?? '–';
+        document.getElementById('statProviders').textContent = s.totalProviders ?? s.providers ?? '–';
+        document.getElementById('statBookings').textContent = s.totalBookings ?? s.bookings ?? '–';
+        document.getElementById('statRevenue').textContent = money(s.totalRevenue ?? s.revenue);
+        document.getElementById('statPendingKyc').textContent = s.pendingKyc ?? '–';
+    }).catch(function(e){ fail('Could not load platform stats: ' + e.message); });
+}
+function loadKyc(){
+    fetch('/api/admin/kyc/pending').then(function(r){ return r.json(); }).then(function(list){
+        var box = document.getElementById('kycList');
+        if(!list.length){ box.innerHTML = '<p>No providers are waiting for KYC verification. 🎉</p>'; return; }
+        box.innerHTML = list.map(function(p){
+            return '<div class="booking-card" style="display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;padding:14px;border:1px solid #e8e4df;border-radius:12px;margin-bottom:10px">'
+                + '<div><b>' + p.name + '</b> · ' + (p.email||'') + ' · ' + (p.phone||'') + '<br><small>'
+                + ((p.location && p.location.address) || 'Dehradun') + ' · Services: ' + ((p.serviceIds||[]).join(', ') || '—') + '</small></div>'
+                + '<div><button class="btn btn-primary btn-sm" onclick="kycAct(' + p.id + ',true)">Approve</button> '
+                + '<button class="btn btn-outline btn-sm" onclick="kycAct(' + p.id + ',false)">Reject</button></div></div>';
+        }).join('');
+    }).catch(function(e){ fail('Could not load KYC queue: ' + e.message); });
+}
+function kycAct(id, approve){
+    fetch('/api/admin/kyc/' + id + (approve ? '/verify' : '/reject'), { method: 'PUT' })
+    .then(function(r){ if(!r.ok) throw new Error('Action failed ('+r.status+')'); loadKyc(); loadProviders(); loadStats(); })
+    .catch(function(e){ fail(e.message); });
+}
+function loadProviders(){
+    fetch('/api/providers').then(function(r){ return r.json(); }).then(function(list){
+        ALL_PROVIDERS = list || []; renderProviders();
+    }).catch(function(e){ fail('Could not load providers: ' + e.message); });
+}
+function renderProviders(){
+    var q = (document.getElementById('provSearch').value || '').toLowerCase();
+    var f = document.getElementById('provFilter').value;
+    var rows = ALL_PROVIDERS.filter(function(p){
+        var hay = ((p.name||'')+' '+(p.email||'')+' '+((p.location&&p.location.address)||'')).toLowerCase();
+        if(q && hay.indexOf(q) < 0) return false;
+        if(f === 'VERIFIED' && !p.isVerified) return false;
+        if(f === 'PENDING' && p.isVerified) return false;
+        return true;
+    });
+    document.getElementById('provRows').innerHTML = rows.length ? rows.map(function(p){
+        return '<tr style="border-top:1px solid #eee"><td><b>'+p.name+'</b><br><small>'+(p.email||'')+'</small></td>'
+            + '<td>'+((p.location&&p.location.address)||'—')+'</td>'
+            + '<td>★ '+(p.rating||0)+' ('+(p.totalReviews||0)+')</td>'
+            + '<td>'+kycBadge(p.isVerified)+'</td>'
+            + '<td>'+(p.isAvailable?'Yes':'No')+'</td>'
+            + '<td>'+(p.isVerified ? '<button class="btn btn-outline btn-sm" onclick="kycAct('+p.id+',false)">Reject</button>'
+                                   : '<button class="btn btn-primary btn-sm" onclick="kycAct('+p.id+',true)">Approve</button>')+'</td></tr>';
+    }).join('') : '<tr><td colspan="6">No providers match your search.</td></tr>';
+}
+loadStats(); loadKyc(); loadProviders();
+</script>
+<script src="/js/pwa.js"></script>
+</body>
+</html>

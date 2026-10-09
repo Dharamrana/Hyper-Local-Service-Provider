@@ -1,7 +1,12 @@
 package com.urbancompany.clone.controller;
 
+import com.urbancompany.clone.model.Location;
+import com.urbancompany.clone.model.ServiceProvider;
 import com.urbancompany.clone.model.User;
+import com.urbancompany.clone.repository.ServiceProviderRepository;
+import com.urbancompany.clone.repository.UserRepository;
 import com.urbancompany.clone.service.UserService;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
@@ -22,9 +27,18 @@ import java.util.Map;
 @RequestMapping("/api/auth")
 public class AuthController {
     private final UserService userService;
+    private final ServiceProviderRepository providerRepository;
+    private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
-    public AuthController(UserService userService) {
+    public AuthController(UserService userService,
+                          ServiceProviderRepository providerRepository,
+                          UserRepository userRepository,
+                          PasswordEncoder passwordEncoder) {
         this.userService = userService;
+        this.providerRepository = providerRepository;
+        this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     /** Sign up + immediate auto-login (UC-style: one step into booking). */
@@ -34,8 +48,46 @@ public class AuthController {
             return ResponseEntity.badRequest()
                     .body(Map.of("message", "Password must be at least 6 characters"));
         }
+        String requestedRole = signup.getRole() == null ? "CUSTOMER" : signup.getRole().trim().toUpperCase();
+        if ("ADMIN".equals(requestedRole)) {
+            return ResponseEntity.badRequest()
+                    .body(Map.of("message", "Admin accounts are created by the platform. Please sign up as Customer or Service Provider."));
+        }
+        if (!"CUSTOMER".equals(requestedRole) && !"PROVIDER".equals(requestedRole)) {
+            return ResponseEntity.badRequest().body(Map.of("message", "Unknown role: " + requestedRole));
+        }
         try {
-            signup.setRole("CUSTOMER"); // never trust role from client
+            if ("PROVIDER".equals(requestedRole)) {
+                if (userRepository.findByEmail(signup.getEmail()).isPresent()
+                        || providerRepository.findByEmail(signup.getEmail()).isPresent()) {
+                    return ResponseEntity.badRequest()
+                            .body(Map.of("message", "An account with this email already exists"));
+                }
+                ServiceProvider provider = new ServiceProvider();
+                provider.setName(signup.getName());
+                provider.setEmail(signup.getEmail());
+                provider.setPhone(signup.getPhone());
+                provider.setPassword(passwordEncoder.encode(signup.getPassword()));
+                provider.setRole("PROVIDER");
+                provider.setLocation(signup.getLocation() != null ? signup.getLocation()
+                        : new Location(30.3429, 77.9620, "Prem Nagar, Dehradun", "248007", "Near Prem Nagar Market"));
+                provider.setRating(0.0);
+                provider.setTotalReviews(0);
+                provider.setIsAvailable(false); // live only after admin KYC verification
+                provider.setIsVerified(false);
+                ServiceProvider savedProvider = providerRepository.save(provider);
+                Authentication auth = new UsernamePasswordAuthenticationToken(
+                        savedProvider.getEmail(), null,
+                        List.of(new SimpleGrantedAuthority("ROLE_PROVIDER")));
+                SecurityContextHolder.getContext().setAuthentication(auth);
+                request.getSession(true).setAttribute("SPRING_SECURITY_CONTEXT", SecurityContextHolder.getContext());
+                return ResponseEntity.ok(Map.of(
+                        "id", savedProvider.getId(), "name", savedProvider.getName(),
+                        "email", savedProvider.getEmail(),
+                        "phone", savedProvider.getPhone() != null ? savedProvider.getPhone() : "",
+                        "role", "PROVIDER", "kycStatus", "PENDING"));
+            }
+            signup.setRole("CUSTOMER");
             User saved = userService.createUser(signup);
             // Auto-login so the user lands straight in the booking flow.
             Authentication auth = new UsernamePasswordAuthenticationToken(
@@ -66,6 +118,7 @@ public class AuthController {
                 "id", u.getId(),
                 "name", u.getName(),
                 "email", u.getEmail(),
-                "phone", u.getPhone() != null ? u.getPhone() : "");
+                "phone", u.getPhone() != null ? u.getPhone() : "",
+                "role", u.getRole() != null ? u.getRole() : "CUSTOMER");
     }
 }

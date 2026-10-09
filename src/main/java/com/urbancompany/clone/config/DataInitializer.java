@@ -30,6 +30,12 @@ public class DataInitializer {
             CouponRepository couponRepository,
             PasswordEncoder passwordEncoder) {
         return args -> {
+            // Platform admin (always ensured; login routes to /admin)
+            if (userRepository.findByEmail("admin@urbanservice.in").isEmpty()) {
+                userRepository.save(new User(null, "HLSP Admin", "admin@urbanservice.in", "9000000000",
+                        passwordEncoder.encode("admin123"), "ADMIN",
+                        new Location(30.3429, 77.9620, "Prem Nagar, Dehradun", "248007", "HLSP HQ")));
+            }
             if (serviceRepository.count() > 0) return;  // already seeded
 
             List<Service> services = Arrays.asList(
@@ -120,7 +126,17 @@ public class DataInitializer {
                             new Location(30.3350, 77.9550, "Suddowala, Dehradun", "248015", "Near Suddowala Chowk"), 4.8, 175, true, true,
                             "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=200&h=200&fit=crop&crop=face", Arrays.asList(5L),
                             Arrays.asList("Verified Cleaner", "Background Checked"), 6,
-                            "Home deep cleaning specialist for Suddowala & Premnagar. Hindi speaking, cash/UPI both accepted.")
+                            "Home deep cleaning specialist for Suddowala & Premnagar. Hindi speaking, cash/UPI both accepted."),
+                    new ServiceProvider(null, "Harish Negi", "harish@hlsp.in", "9811002255", providerPass, "PROVIDER",
+                            new Location(30.3600, 78.0500, "Rajpur Road, Dehradun", "248001", "Near Rajpur Road"), 4.7, 140, true, true,
+                            "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=200&h=200&fit=crop&crop=face", Arrays.asList(2L, 6L),
+                            Arrays.asList("ITI Electrician", "AC Certified"), 8,
+                            "Electrician + AC technician serving Rajpur Road & Vasant Vihar."),
+                    new ServiceProvider(null, "Geeta Rawat", "geeta@hlsp.in", "9811002266", providerPass, "PROVIDER",
+                            new Location(30.3280, 78.0180, "Vasant Vihar, Dehradun", "248006", "Near Vasant Vihar"), 4.6, 98, true, true,
+                            "https://images.unsplash.com/photo-1531123897727-8f129e1688ce?w=200&h=200&fit=crop&crop=face", Arrays.asList(5L, 8L),
+                            Arrays.asList("Verified Cleaner", "Painter"), 5,
+                            "Cleaning + painting duo lead for Vasant Vihar & Clement Town homes.")
             ));
 
         };
